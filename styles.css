@@ -1,0 +1,59 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.container .cell-group {
+    width: 360px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.container .cell-group .cell {
+    border: 1px solid black;
+    width: 100%;
+    height: 120px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .message-dialogue {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    border: 1px solid black;
+    background-color: #fff;
+    width: 200px;
+    height: 100px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.container .message-dialogue #okay {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    background-color: green;
+    color: #fff;
+}
