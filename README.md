@@ -7,4 +7,4 @@
 
 ## Live
 
-Click [here]("https://tic-tac-toe-mehedi.netlify.app/") to enjoy the game
+Click [here](https://tic-tac-toe-mehedi.netlify.app/) to enjoy the game
