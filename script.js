@@ -1,24 +1,35 @@
 import patterns from "./patterns.js";
 
+// DOM Elements
 const playerTurnElement = document.querySelector(".player-turn");
 const cells = document.querySelectorAll(".cell");
 const messgaeDialogueElement = document.querySelector(".message-dialogue");
 const textMessageElement = document.querySelector(".message");
 const okayButtonElement = document.getElementById("okay");
 
+// Arrays to store positions
 const firstPerson = [];
 const secondPerson = [];
 
-let totalMovement = 0;
+// Check player movements
+let totalMovements = 0;
 const MAX_MOVEMENT = 9;
 
-playerTurnElement.innerText = totalMovement % 2 === 0 ? "First Player Turn" : "Second Player Turn";
-
+/**
+ * Add event listner for each cell
+ * @method
+ * @param {Element} cell - Element with the class name 'cell'
+ * @param {Number} index - Index number of the cells array
+ * @returns Nothing
+ */
 cells.forEach((cell, index) => {
     cell.addEventListener("click", () => {
-        if (totalMovement < MAX_MOVEMENT) {
-            ++totalMovement;
-            if (totalMovement % 2 === 0) {
+        if (totalMovements < MAX_MOVEMENT) {
+            // Increase the movement after each move
+            ++totalMovements;
+
+            // Check who is playing
+            if (totalMovements % 2 === 0) {
                 playerTurnElement.innerText = "First Person Turn";
                 secondPerson.push(index);
                 cell.innerText = "O";
@@ -27,42 +38,63 @@ cells.forEach((cell, index) => {
                 firstPerson.push(index);
                 cell.innerText = "X";
             }
+
+            // Calling the function to check the winner
             checkTheWinner();
-        } else {
-            console.log("Draw");
+
+            if (totalMovements === 9) {
+                // The match is draw if no one wins in 9 movements
+                messgaeDialogueElement.style.display = "flex";
+                textMessageElement.innerText = "Match Draw";
+            }
         }
     });
 });
 
+// Event listner for okay button, it can only be triggered when the match ends
 okayButtonElement.addEventListener("click", () => {
+    // Reset arrays and movements
     firstPerson.length = 0;
     secondPerson.length = 0;
+    totalMovements = 0;
 
+    // Reset all the marks from the board
     cells.forEach((cell) => {
         cell.innerText = "";
     });
 
+    // Reset player turn
     messgaeDialogueElement.style.display = "none";
     playerTurnElement.innerText = "First Player Turn";
 });
 
+/**
+ * Winner checker method
+ * @method
+ * @returns Nothing
+ */
 const checkTheWinner = () => {
+    // Sort both arrays
     firstPerson.sort((a, b) => a - b);
     secondPerson.sort((a, b) => a - b);
-    console.log(firstPerson, secondPerson);
+
+    // Store the result of matching with patterns
     const result = {
         hasFirstPersonWon: false,
         hasSecondPersonWon: false,
     };
 
+    // Match with patterns only if first person has given 3 or more moves
     if (firstPerson.length >= 3) {
         result.hasFirstPersonWon = matchPattern(firstPerson);
     }
 
+    // Match with patterns only if seond person has given 3 or more moves
     if (secondPerson.length >= 3) {
         result.hasSecondPersonWon = matchPattern(secondPerson);
     }
 
+    // Return the result depending on which person has own the game
     if (result.hasFirstPersonWon) {
         messgaeDialogueElement.style.display = "flex";
         textMessageElement.innerText = "First Player Wins";
@@ -72,6 +104,13 @@ const checkTheWinner = () => {
     }
 };
 
+/**
+ * Matches all the patterns with the player
+ * In this function snake case variable naming is used for better readability
+ * @method
+ * @param {Array} arr - First or Second Person Array
+ * @returns True or False
+ */
 const matchPattern = (arr) => {
     let flag = false;
     patterns.forEach((pattern) => {
